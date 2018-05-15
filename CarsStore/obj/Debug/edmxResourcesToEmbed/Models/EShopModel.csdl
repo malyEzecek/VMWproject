@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarsSHopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Car">
+    <Key>
+      <PropertyRef Name="Id_car" />
+    </Key>
+    <Property Name="Id_car" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name_car" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="Consumption" Type="Int32" Nullable="false" />
+    <Property Name="Doors" Type="Int32" Nullable="false" />
+    <Property Name="Achievement" Type="Int32" Nullable="false" />
+    <Property Name="Cub_capacity" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="Seats" Type="Int32" Nullable="false" />
+    <Property Name="Delivery" Type="Boolean" Nullable="false" />
+    <Property Name="Navigation" Type="Boolean" />
+    <Property Name="Climatisation" Type="Boolean" />
+    <Property Name="ABS" Type="Boolean" />
+    <Property Name="ESP" Type="Boolean" />
+    <Property Name="Leather_interior" Type="Boolean" />
+    <Property Name="Xenons" Type="Boolean" />
+    <NavigationProperty Name="Colours" Relationship="Self.Car_Colour" FromRole="Car" ToRole="Colour" />
+    <NavigationProperty Name="Engines" Relationship="Self.Car_Engine" FromRole="Car" ToRole="Engine" />
+    <NavigationProperty Name="Manufacturies" Relationship="Self.Car_Manufact" FromRole="Car" ToRole="Manufactury" />
+    <NavigationProperty Name="Transmissions" Relationship="Self.Car_transmission" FromRole="Car" ToRole="Transmission" />
+  </EntityType>
+  <EntityType Name="Colour">
+    <Key>
+      <PropertyRef Name="Id_col" />
+    </Key>
+    <Property Name="Id_col" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name_col" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Cars" Relationship="Self.Car_Colour" FromRole="Colour" ToRole="Car" />
+  </EntityType>
+  <EntityType Name="Engine">
+    <Key>
+      <PropertyRef Name="Id_eng" />
+    </Key>
+    <Property Name="Id_eng" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Cars" Relationship="Self.Car_Engine" FromRole="Engine" ToRole="Car" />
+  </EntityType>
+  <EntityType Name="Manufactury">
+    <Key>
+      <PropertyRef Name="Id_man" />
+    </Key>
+    <Property Name="Id_man" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name_man" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Descrip" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Cars" Relationship="Self.Car_Manufact" FromRole="Manufactury" ToRole="Car" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Transmission">
+    <Key>
+      <PropertyRef Name="Id_trans" />
+    </Key>
+    <Property Name="Id_trans" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name_trans" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Cars" Relationship="Self.Car_transmission" FromRole="Transmission" ToRole="Car" />
+  </EntityType>
+  <Association Name="Car_Colour">
+    <End Role="Car" Type="Self.Car" Multiplicity="*" />
+    <End Role="Colour" Type="Self.Colour" Multiplicity="*" />
+  </Association>
+  <Association Name="Car_Engine">
+    <End Role="Car" Type="Self.Car" Multiplicity="*" />
+    <End Role="Engine" Type="Self.Engine" Multiplicity="*" />
+  </Association>
+  <Association Name="Car_Manufact">
+    <End Role="Car" Type="Self.Car" Multiplicity="*" />
+    <End Role="Manufactury" Type="Self.Manufactury" Multiplicity="*" />
+  </Association>
+  <Association Name="Car_transmission">
+    <End Role="Car" Type="Self.Car" Multiplicity="*" />
+    <End Role="Transmission" Type="Self.Transmission" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="CarsSHopEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cars" EntityType="Self.Car" />
+    <EntitySet Name="Colours" EntityType="Self.Colour" />
+    <EntitySet Name="Engines" EntityType="Self.Engine" />
+    <EntitySet Name="Manufacturies" EntityType="Self.Manufactury" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="Transmissions" EntityType="Self.Transmission" />
+    <AssociationSet Name="Car_Colour" Association="Self.Car_Colour">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="Colour" EntitySet="Colours" />
+    </AssociationSet>
+    <AssociationSet Name="Car_Engine" Association="Self.Car_Engine">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="Engine" EntitySet="Engines" />
+    </AssociationSet>
+    <AssociationSet Name="Car_Manufact" Association="Self.Car_Manufact">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="Manufactury" EntitySet="Manufacturies" />
+    </AssociationSet>
+    <AssociationSet Name="Car_transmission" Association="Self.Car_transmission">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="Transmission" EntitySet="Transmissions" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

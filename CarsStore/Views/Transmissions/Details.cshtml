@@ -1,0 +1,26 @@
+﻿@model CarsStore.Models.Transmission
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Transmission</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name_trans)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name_trans)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id_trans }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

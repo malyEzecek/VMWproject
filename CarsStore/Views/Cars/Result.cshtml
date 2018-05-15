@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Result";
+}
+
+<h2>Index</h2>
+
+<p>
+    <label>Total Amount:</label>  @ViewBag.TotalAmount
+</p>
+
+<p>
+    <label>Searching/Filtering time:</label>  @ViewBag.TimeOfSearching
+</p>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("name")
+        <input type="submit" value="Search" />
+    </p>
+}
+

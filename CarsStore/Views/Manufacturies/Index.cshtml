@@ -1,0 +1,39 @@
+﻿@model IEnumerable<CarsStore.Models.Manufactury>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name_man)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descrip)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name_man)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descrip)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id_man }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id_man }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id_man })
+        </td>
+    </tr>
+}
+
+</table>

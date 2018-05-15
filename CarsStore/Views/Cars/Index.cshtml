@@ -1,0 +1,131 @@
+﻿@model IEnumerable<CarsStore.Models.Car>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<p>
+    <label>Total Amount:</label>  @ViewBag.TotalAmount
+</p>
+
+<p>
+    <label>Searching/Filtering time:</label>  @ViewBag.TimeOfSearching
+</p>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("name")
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name_car)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Consumption)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Doors)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Achievement)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cub_capacity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Seats)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Delivery)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Navigation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Climatisation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ABS)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ESP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Leather_interior)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Xenons)
+        </th>
+        <th></th>
+    </tr>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name_car)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Consumption)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doors)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Achievement)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cub_capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Delivery)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Navigation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Climatisation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ABS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ESP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Leather_interior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Xenons)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id_car }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id_car }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id_car })
+            </td>
+        </tr>
+    }
+    }
+
+
+</table>
