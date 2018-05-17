@@ -1,0 +1,181 @@
+<html>
+    <head>
+        <title>Car DB</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+
+    </style>
+    <body>
+        <div class="container">
+            <h2>Car Database</h2>
+            <form>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="query">Query</label>
+                        <input type="text" pattern=".{3,}" required class="form-control" id="query" placeholder="Skoda">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="price">Price</label>
+                        <select class="form-control" id="price">
+                            <option selected>Any</option>
+                            <option><= 50 000 CZK</option>
+                            <option>50 000 - 150 000 CZK</option>
+                            <option>150 000 - 500 000 CZK</option>
+                            <option>500 000 - 1 000 000 CZK</option>
+                            <option>1 000 000 - 3 000 000 CZK</option>
+                            <option>>= 3 000 000 CZK</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="year">Production year</label>
+                        <select class="form-control" id="year">
+                            <option selected>Any</option>
+                            <option><= 1980</option>
+                            <option>1980 - 1990</option>
+                            <option>1990 - 2000</option>
+                            <option>2000 - 2010</option>
+                            <option>>= 2010</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="consumption">Consumption</label>
+                        <select class="form-control" id="consumption">
+                            <option selected>Any</option>
+                            <option><= 6</option>
+                            <option>6 - 8</option>
+                            <option>8 - 10</option>
+                            <option>10 - 12</option>
+                            <option>>= 12</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="fuel">Fuel</label>
+                        <select class="form-control" id="fuel">
+                            <option selected>Any</option>
+                            <option>Gas</option>
+                            <option>Diesel</option>
+                            <option>Electricity</option>
+                            <option>Hybrid</option>
+                            <option>LPG</option>
+                        </select>
+                    </div>
+                </div>
+                <fieldset class="form-group">
+                    <div class="row">
+                        <legend class="col-form-label col-sm-2 pt-0">Parking Assistant</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="parking" id="parking1" value="0" checked>
+                                <label class="form-check-label" for="parking1">Any</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="parking" id="parking2" value="1">
+                                <label class="form-check-label" for="parking2">No</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="parking" id="parking3" value="2">
+                                <label class="form-check-label" for="parking3">Yes</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <div class="row">
+                        <legend class="col-form-label col-sm-2 pt-0">Xenons</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="xenons" id="xenons1" value="0" checked>
+                                <label class="form-check-label" for="xenons1">Any</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="xenons" id="xenons2" value="1">
+                                <label class="form-check-label" for="xenons2">No</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="xenons" id="xenons3" value="2">
+                                <label class="form-check-label" for="xenons3">Yes</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <div class="row">
+                        <legend class="col-form-label col-sm-2 pt-0">ABS</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ABS" id="ABS1" value="0" checked>
+                                <label class="form-check-label" for="ABS1">Any</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ABS" id="ABS2" value="1">
+                                <label class="form-check-label" for="ABS2">No</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ABS" id="ABS3" value="2">
+                                <label class="form-check-label" for="ABS3">Yes</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <div class="row">
+                        <legend class="col-form-label col-sm-2 pt-0">Air Conditioning</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="airConditioning" id="airConditioning1" value="0" checked>
+                                <label class="form-check-label" for="airConditioning1" >Any</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="airConditioning" id="airConditioning2" value="1">
+                                <label class="form-check-label" for="airConditioning2">No</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="airConditioning" id="airConditioning3" value="2">
+                                <label class="form-check-label" for="airConditioning3">Yes</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="form-group col-md-1">
+                    <div class="row">
+                            <label for="size">Number of Cars: </label>
+                            <input type="number" min="1" max="300" required class="form-control" id="size" value="50">
+        
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+
+            <h3>Results: </h3>
+
+            <table class="table table-striped" id="results">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price (CZK)</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">Litres per 100km</th>
+                        <th scope="col">Fuel</th>
+                        <th scope="col">PA</th>
+                        <th scope="col">Xenons</th>
+                        <th scope="col">ABS</th>
+                        <th scope="col">AC</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="./main.js"></script>
+</html>
