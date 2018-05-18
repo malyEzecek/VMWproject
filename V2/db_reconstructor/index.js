@@ -1,10 +1,11 @@
 const fs = require('fs');
 const cors = require('cors');
 const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
-
-const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 const port = 3001;
 
 app.use(express.static('public'))
@@ -17,25 +18,61 @@ const HEADERS = {"Content-Type": "application/json"};
 const DICTIONARY = fs.readFileSync('./dict_short.txt').toString().split("\n");
 const MAX_VALUES = [5, 4, 4, 4, 1, 1, 1, 1];
 
+io.on('connection', socket => {
+  new DBReconstructor(socket);
+})
+
+http.listen(port, () => {
+  console.log("Server listening on port " + port)
+});
+
 class DBReconstructor {
-  constructor(_maxResults) {
-    this.maxResults = _maxResults;
+  constructor(socket) {
+    this.maxResults = 100;
+    this.retrieved = [];
+    this.retrievedIDs = new Set();
+    this.socket = socket;
+    this.wordIndex = 0;
+
+    this.socket.on("stop", () => {
+      if (this.running)
+        this.stop();
+    });
+
+    this.socket.on("disconnect", () => {
+      console.log("Client disconnected");
+      if (this.running)
+        this.stop();
+    });
+
+    this.socket.on("run", value => {
+      if (value === this.running)
+        return;
+      if (value)
+        this.run();
+      else
+        this.stop();
+    });
   }
 
   run() {
     console.log("Starting reconstruction.");
+    this.clear();
+    this.wordIndex = 0;
     this.lastSize = 0;
     this.timeThen = Date.now();
-    this.retrieved = [];
-    this.retrievedIDs = new Set();
     this.running = true;
     
-    this.nextWord(0);
+    this.nextWord(0).then(() => {
+      this.stop();
+    })
   }
 
   stop() {
-    console.log("Stopping reconstruction.");
     this.running = false;
+    fs.writeFileSync("./public/data.json", JSON.stringify(this.retrieved));
+    this.socket.emit("done");
+    console.log("Stopping reconstruction.");
   }
 
   findCars(query, vector) {
@@ -45,6 +82,9 @@ class DBReconstructor {
 
   find(query, vector, index) {
     return this.findCars(query, vector).then(result => {
+      if (!this.running)
+        return Promise.resolve();
+      
       result.items.forEach(car => {
         if (!this.retrievedIDs.has(car._id)) {
           this.retrievedIDs.add(car._id);
@@ -53,9 +93,11 @@ class DBReconstructor {
       });
   
       if (this.retrieved.length !== this.lastSize) {
-        var log =  query + "," + (Date.now() - this.timeThen) / 1000 + "," + this.retrieved.length + "\n";
+        const timestamp = (Date.now() - this.timeThen) / 1000;
+        var log =  query + "," + timestamp + "," + this.retrieved.length + "\n";
+        this.newRecord({timestamp: timestamp, size: this.retrieved.length, query: query});
         console.log(log);
-        fs.appendFile('./results.csv', log, function (err) {
+        fs.appendFile('./public/results.csv', log, function (err) {
           if (err) return console.log(err);
         });
       }
@@ -80,18 +122,25 @@ class DBReconstructor {
   }
 
   nextWord(i) {
-    if (i > DICTIONARY.length - 1)
+    if (i > DICTIONARY.length - 1 || !this.running)
       return;
     
     var word = DICTIONARY[i].trim();
   
-    this.find(word, Array(8), 0).then(() => this.nextWord(i + 1));
+    return this.find(word, Array(8), 0).then(() => this.nextWord(i + 1));
+  }
+
+  clear() {
+    this.retrieved.length = [];
+    this.retrievedIDs.clear();
+    try {
+      fs.unlinkSync("./public/results.csv");
+    } catch(e) {
+
+    }
+  }
+
+  newRecord(value) {
+    this.socket.emit("record", value);
   }
 }
-
-app.listen(port, () => {
-  console.log("Server listening on port " + port)
-
-  var rec = new DBReconstructor(100);
-  rec.run();
-});

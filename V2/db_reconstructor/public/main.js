@@ -1,94 +1,91 @@
 (function() {
-    const URL = "/search";
-    const HEADERS = {"Content-Type": "application/json"};
-    const FUELS = ["Gas", "Diesel", "Electricity", "Hybrid", "LPG"];
-    let tBody, form;
+    let socket;
 
-    const SELECT_IDS = ["price", "year", "consumption", "fuel"];
-    const RADIO_NAMES = ["parking", "xenons", "ABS", "airConditioning"];
+    let timeEl, countEl, wordEl, buttonsContainer, runButton, stopButton, dataButton, reportButton;
 
     function init() {
-        tBody = document.querySelector("#results tbody");
-        form = document.querySelector("form");
+        socket = io.connect("http://localhost:3001")
+        timeEl = document.getElementById("time");
+        countEl = document.getElementById("count");
+        wordEl = document.getElementById("current-word");
+        buttonsContainer = document.getElementById("button-container");
+        runButton = document.getElementById("run-button");
+        stopButton = document.getElementById("stop-button");
+        dataButton = document.getElementById("download-data");
+        reportButton = document.getElementById("download-report");
+        reset();
 
-        form.onsubmit = function(event) {
-            event.preventDefault();
-            onSubmit();
-        }
-    }
+        runButton.onclick = () => run(true);
+        stopButton.onclick = () => run(false);
 
-    function clear() {
-        tBody.innerHTML = "";
-    }
+        reportButton.onclick = () => downloadFile("/results.csv");
+        dataButton.onclick = () => downloadFile("/data.json");
 
-    function getIDElem(id) {
-        let elem = document.createElement("th");
-        elem.scope = "row";
-        elem.innerText = id;
+        socket.on("record", data => {
+            let timestamp = data.timestamp.toFixed(0);
+            let mins = (timestamp / 60).toFixed(0);
+            if (mins < 10)
+                mins = "0" + mins;
+            let secs = (timestamp % 60);
+            if (secs < 10)
+                secs = "0" + secs;
 
-        return elem;
-    }
-
-    function getCell(content) {
-        let elem = document.createElement("td");
-        elem.innerText = content;
-        
-        return elem;
-    }
-
-    function getCar(car) {
-        let tr = document.createElement("tr");
-        tr.appendChild(getIDElem(car._id));
-        tr.appendChild(getCell(car.name));
-        tr.appendChild(getCell(car.price));
-        tr.appendChild(getCell(car.year));
-        tr.appendChild(getCell(car.consumption));
-        tr.appendChild(getCell(FUELS[car.fuel]));
-        tr.appendChild(getCell(car.parkingAssistant));
-        tr.appendChild(getCell(car.xenons));
-        tr.appendChild(getCell(car.ABS));
-        tr.appendChild(getCell(car.airConditioning));
-
-        return tr;
-    }
-
-    function toValue(i) {
-        if (i == 0)
-            return null;
-        else
-            return i - 1;
-    }
-
-    function radioValue(id) {
-        console.log(`[name="${id}"][checked]`);
-        let i = document.querySelector(`[name="${id}"]:checked`).value;
-        return toValue(i);
-    }
-
-    function selectValue(id) {
-        let elem = document.getElementById(id);
-        return toValue(elem.selectedIndex);
-    }
-
-    function onSubmit() {
-        const selects = SELECT_IDS.map(selectValue);
-        const radios = RADIO_NAMES.map(radioValue);
-
-        const name = document.getElementById("query").value;
-        const vector = [...selects, ...radios];
-        const size = +document.getElementById("size").value;
-        const body = JSON.stringify({query: name, size: size, vector: vector});
-
-        fetch(URL, {method: "POST", headers: HEADERS, body: body})
-        .then(res => res.json())
-        .then(results => {
-            clear();
-            results.items.forEach(car => {
-                tBody.appendChild(getCar(car));
-            })
+            timeEl.value =  mins + ":" + secs;
+            countEl.value = data.size;
+            wordEl.value = data.query;
         });
+
+        socket.on("done", () => {
+            run(false);
+        })
     }
 
+    function reset() {
+        timeEl.value = "00:00";
+        wordEl.value = "";
+        countEl.value = 0;
+    }
+
+    function run(value) {
+        if (value)
+            reset();
+
+        runButton.disabled = value;
+        stopButton.disabled = !value;
+        buttonsContainer.hidden = value;
+        socket.emit("run", value);
+    }
+
+    function downloadFile(sUrl) {
+        //If in Chrome or Safari - download via virtual link click
+        if (downloadFile.isChrome || downloadFile.isSafari) {
+            //Creating new link node.
+            var link = document.createElement('a');
+            link.href = sUrl;
+    
+            if (link.download !== undefined){
+                //Set HTML5 download attribute. This will prevent file from opening if supported.
+                var fileName = sUrl.substring(sUrl.lastIndexOf('/') + 1, sUrl.length);
+                link.download = fileName;
+            }
+    
+            //Dispatching click event.
+            if (document.createEvent) {
+                var e = document.createEvent('MouseEvents');
+                e.initEvent('click' ,true ,true);
+                link.dispatchEvent(e);
+                return true;
+            }
+        }
+    
+        // Force file download (whether supported by server).
+        var query = '?download';
+    
+        window.open(sUrl + query);
+    }
+ 
+    downloadFile.isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    downloadFile.isSafari = navigator.userAgent.toLowerCase().indexOf('safari') > -1;
 
     document.onreadystatechange = function() {
         if (document.readyState === "complete")
